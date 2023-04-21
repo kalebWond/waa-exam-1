@@ -1,14 +1,29 @@
 import axios from "axios";
 import './AddStudent.css';
+import { useRef } from "react";
+import { useNavigate } from "react-router";
 
-const NewProductHook = (props) => {
+const AddStudent = (props) => {
+    const formRef = useRef()
+    const navigate = useNavigate();
 
-
+    const onSubmit = (e) => {
+        e.preventDefault();
+        const form = formRef.current;
+        
+        const body = {
+            name: form["name"].value,
+            gpa: form["gpa"].value
+        }
+        axios.post('http://localhost:8080/api/v1/students', body)
+            .then(() => navigate("/students"))
+            .catch(err => console.log(err))
+    }
 
     return (
         <div className="NewProduct">
 
-            <form  >
+            <form ref={formRef} onSubmit={onSubmit}>
                 <h1>Add a Student</h1>
 
                 <label>Name</label>
@@ -30,4 +45,4 @@ const NewProductHook = (props) => {
 
 }
 
-export default NewProductHook;
+export default AddStudent;
